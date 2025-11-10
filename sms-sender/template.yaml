@@ -18,8 +18,11 @@ Resources:
       CodeUri: src/
       Handler: index.handler
       Policies:
-        - SNSPublishMessagePolicy:
-            TopicName: '*'
+        - Statement:
+          - Effect: Allow
+            Action:
+              - sns:Publish
+            Resource: '*'
       FunctionUrlConfig:
         AuthType: NONE
         Cors:
