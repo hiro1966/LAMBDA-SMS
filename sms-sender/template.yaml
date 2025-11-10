@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SMS Sender Application using AWS Lambda and SNS
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 256
+    Runtime: nodejs20.x
+    Environment:
+      Variables:
+        AWS_REGION_SNS: ap-northeast-1
+
+Resources:
+  SmsSenderFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: index.handler
+      Policies:
+        - SNSPublishMessagePolicy:
+            TopicName: '*'
+      FunctionUrlConfig:
+        AuthType: NONE
+        Cors:
+          AllowOrigins:
+            - '*'
+          AllowMethods:
+            - GET
+            - POST
+          AllowHeaders:
+            - '*'
+
+Outputs:
+  SmsSenderFunctionUrl:
+    Description: "Lambda Function URL"
+    Value: !GetAtt SmsSenderFunctionUrl.FunctionUrl
+  SmsSenderFunction:
+    Description: "SMS Sender Lambda Function ARN"
+    Value: !GetAtt SmsSenderFunction.Arn
